@@ -32,6 +32,7 @@ const register = async (req, res) => {
       password,
     });
 
+    // In both register and login
     const omnitoken = jwt.sign(
       {
         id: user._id,
@@ -39,6 +40,7 @@ const register = async (req, res) => {
         username: user.username,
       },
       process.env.JWT_SECRET,
+      { expiresIn: "7d" }, // ✅ add this
     );
 
     try {
@@ -67,11 +69,11 @@ const register = async (req, res) => {
     user.password = undefined;
 
     res.cookie("omnitoken", omnitoken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none",
-  maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
-});
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
 
     res.status(201).json({
       message: "User registered successfully",
@@ -111,6 +113,7 @@ const login = async (req, res) => {
       success: false,
     });
   }
+  // In both register and login
   const omnitoken = jwt.sign(
     {
       id: user._id,
@@ -118,14 +121,15 @@ const login = async (req, res) => {
       username: user.username,
     },
     process.env.JWT_SECRET,
+    { expiresIn: "7d" }, // ✅ add this
   );
 
- res.cookie("omnitoken", omnitoken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none",
-  maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
-});
+  res.cookie("omnitoken", omnitoken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
   user.password = undefined;
   res.status(200).json({
@@ -237,39 +241,46 @@ const verify_Email = async (req, res) => {
 };
 
 const get_me = async (req, res) => {
-  const omnitoken = req.cookies.omnitoken;
+  try {                              // ✅ add try/catch
+    const omnitoken = req.cookies.omnitoken;
 
-  if (!omnitoken) {
-    return res.status(401).json({
-      messasge: "User is Unauthorized",
+    if (!omnitoken) {
+      return res.status(401).json({
+        message: "User is Unauthorized",
+      });
+    }
+
+    let decoded = null;
+
+    try {
+      decoded = jwt.verify(omnitoken, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(401).json({
+        message: "user not authorized",
+        success: false,
+      });
+    }
+
+    const user = await UserModel.findOne({ email: decoded.email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    res.status(200).json({
+      message: "user fetched successfully",
+      success: true,
+      user,
     });
-  }
-
-  let decoded = null;
-
-  try {
-    decoded = jwt.verify(omnitoken, process.env.JWT_SECRET);
-  } catch (err) {
-    return res.status(401).json({
-      message: "user not authorized",
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
       success: false,
     });
   }
-
-  const user = await UserModel.findOne({ email: decoded.email });
-
-  if (!user) {
-    return res.status(404).json({
-      message: "User not found",
-      success: false,
-    });
-  }
-
-  res.status(200).json({
-    message: "user fetched successfully",
-    success: true,
-    user,
-  });
 };
 
 module.exports = { register, login, verify_Email, get_me };
