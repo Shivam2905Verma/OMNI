@@ -1,0 +1,57 @@
+@mixin flex($justify) {
+  display: flex;
+  justify-content: $justify;
+  align-items: center;
+}
+
+.home-container {
+  height: 100%;
+  width: 100%;
+  background-color: #eaeaeb;
+  padding-top: 1rem;
+
+@mixin flex($justify) {
+  display: flex;
+  justify-content: $justify;
+  align-items: center;
+}
+
+.navbar-container {
+  width: 90%;
+  margin: auto;
+  padding: 1rem 2rem;
+  background-color: rgb(27, 27, 27);
+  border-radius: 0.5rem;
+  color: #eaeaeb;
+
+  @include flex(space-between);
+
+  .navbar-left {
+    @include flex(center);
+    position: relative;
+    gap: 3rem;
+  }
+
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .anchor {
+    position: absolute;
+    height: 2.2rem;
+    background: gray;
+    border-radius: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+
+}
+
+}

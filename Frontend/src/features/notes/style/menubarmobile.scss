@@ -1,0 +1,93 @@
+@mixin flex($justify) {
+  display: flex;
+  justify-content: $justify;
+  align-items: center;
+}
+
+.menubar-mobile-divider {
+  height: 2.5px;
+  background-color: #eaeaeb;
+  width: 100%;
+}
+
+.menuBar-mobile {
+  position: absolute;
+  display: none;
+  height: 100%;
+  width: 300px;
+  z-index: 999;
+  background-color: #d7d6d9;
+  border-left: 2px solid gray;
+  right: 0%;
+  transition: all ease 0.3s;
+  padding: 0.7rem;
+
+  @media (max-width: 565px) {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+
+  .menuBar-mobile-top {
+    @include flex(space-between);
+
+    i {
+      font-size: 2rem;
+    }
+  }
+
+  .menuBar-mobile-middle {
+    .menubar-colors {
+      .menu-colors-names {
+        @include flex(start);
+        margin-top: 0.5rem;
+        gap: 1rem;
+
+        input {
+          width: 80%;
+        }
+      }
+
+      .menu-colors-btn {
+        width: 100%;
+        overflow: hidden;
+        opacity: 0;
+        transition:
+          max-height 0.3s ease,
+          opacity 0.3s ease,
+          margin 0.3s ease;
+        margin-top: 0;
+      }
+
+      .menu-colors-btn.visible {
+        opacity: 1;
+        margin-top: 8px;
+      }
+    }
+
+    .side-bar-middle-option {
+      @include flex(start);
+      gap: 1rem;
+      cursor: pointer;
+      padding: 1rem;
+      border-radius: 0.7rem;
+      width: 100%;
+      transition: all ease 0.3s;
+    }
+
+    .side-bar-middle-option:hover {
+      background-color: #ebebeb;
+    }
+  }
+
+  .side-bar-bottom {
+    @include flex(space-between);
+    padding: 0.5rem 0.5rem;
+    background-color: #ebebeb;
+    border-radius: 0.7rem;
+    width: 100%;
+    img {
+      width: 2rem;
+    }
+  }
+}

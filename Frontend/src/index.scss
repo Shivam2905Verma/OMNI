@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.input-style {
+  background-color: transparent;
+  backdrop-filter: blur(5rem);
+  padding: 0.7rem 1rem;
+  outline: none;
+  border: 1px solid rgb(80, 80, 80);
+  border-radius: 0.5rem;
+  box-shadow: inset 0px 0px 3px black;
+}
+
+.btn-style {
+  background-color: transparent;
+  backdrop-filter: blur(5rem);
+  padding: 0.7rem;
+  outline: none;
+  background-color: rgb(56, 56, 56);
+  box-shadow: inset 0px 0px 15px black;
+  // background-color: #e2f1fb;
+  // box-shadow: inset 0px 0px 15px #5dbdfd;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  font-weight: 650;
+  color: white;
+
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.loadingspinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.page-loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #555;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: auto;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform ease 0.2s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  i {
+    color: white;
+    font-size: 20px;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-style:hover {
+  box-shadow: inset 0px 0px 20px black;
+  // box-shadow: inset 0px 0px 15px #5a6c83;
+  // background-color: #5a6c83;
+  scale: 1.01;
+}
