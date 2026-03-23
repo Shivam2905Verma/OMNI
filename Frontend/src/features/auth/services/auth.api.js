@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://omni-backend-576f.onrender.com",
+  // baseURL: "http://localhost:5000",
   withCredentials: true,
   validateStatus: () => true,
 });
@@ -23,6 +24,14 @@ export async function register(email, username, password) {
       username,
       password,
     });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function logout() {
+  try {
+    const res = await api.post("/api/auth/logout");
     return res.data;
   } catch (error) {
     throw error;

@@ -1,14 +1,13 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../auth/auth.slice";
+import { useSelector } from "react-redux";
 
-const NavBar = () => {
+const NavBar = ({ value }) => {
   const location = useLocation();
   const [style, setStyle] = useState({});
+  const { handleLogout } = value;
 
   const user = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
   const homeRef = useRef(null);
 
   const moveAnchor = (element, color) => {
@@ -65,12 +64,13 @@ const NavBar = () => {
           <NavLink
             className="nav-link nav-logout"
             onClick={() => {
-              dispatch(setUser(null));
+               handleLogout();
             }}
             onMouseEnter={(e) => moveAnchor(e.target, "red")}
             onMouseLeave={() => {
               if (location.pathname === "/") {
                 moveAnchor(homeRef.current);
+               
               }
             }}
           >

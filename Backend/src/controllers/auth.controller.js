@@ -283,4 +283,24 @@ const get_me = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verify_Email, get_me };
+const logout = async (req, res) => {
+  try {
+    res.clearCookie("omnitoken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+
+    res.status(200).json({
+      message: "Logged out successfully",
+      success: true,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+module.exports = { register, login, verify_Email, get_me,logout };
