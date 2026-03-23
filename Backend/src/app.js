@@ -9,7 +9,7 @@ const handlleError = require("./middleware/error.middleware");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173" , "http://localhost:5174"],
+    origin: ["https://omni-five-topaz.vercel.app" , "http://localhost:5174"],
     credentials: true,
   }),
 );
