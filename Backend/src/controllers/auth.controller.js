@@ -66,7 +66,12 @@ const register = async (req, res) => {
 
     user.password = undefined;
 
-    res.cookie("omnitoken", omnitoken);
+    res.cookie("omnitoken", omnitoken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
+});
 
     res.status(201).json({
       message: "User registered successfully",
@@ -115,7 +120,12 @@ const login = async (req, res) => {
     process.env.JWT_SECRET,
   );
 
-  res.cookie("omnitoken", omnitoken);
+ res.cookie("omnitoken", omnitoken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
+});
 
   user.password = undefined;
   res.status(200).json({
