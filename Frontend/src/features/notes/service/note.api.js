@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://omni-backend-576f.onrender.com",
+  baseURL: "https://omni-3lpn.vercel.app/",
   // baseURL: "http://localhost:5000",
   withCredentials: true,
   validateStatus: () => true,
