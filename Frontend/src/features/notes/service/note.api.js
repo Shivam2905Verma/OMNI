@@ -1,7 +1,12 @@
 import axios from "axios";
 
+// const api = axios.create({
+//   baseURL: "",
+//   withCredentials: true,
+//   validateStatus: () => true,
+// });
 const api = axios.create({
-  baseURL: "",
+  baseURL:  "http://localhost:5000",
   withCredentials: true,
   validateStatus: () => true,
 });
