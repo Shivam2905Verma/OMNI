@@ -15,10 +15,10 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-
+//* use api before any route !important
 app.use("/api/auth", authRouter);
 app.use("/api/omni", dataRouter);
-
+app.get("/ping", (req, res) => res.send("pong"));
 app.use(handlleError);
 
 module.exports = app;
