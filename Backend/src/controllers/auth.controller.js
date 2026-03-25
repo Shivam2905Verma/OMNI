@@ -55,7 +55,7 @@ const register = async (req, res) => {
                 <h1 style="color: #1a1a1a;">Welcome to Omni, ${username}!</h1>
                 <p style="color: #555; line-height: 1.5;">We're excited to have you on board. Explore your new dashboard and get started today.</p>
                 <div style="margin-top: 30px;">
-                    <a href="https://omni-4ih4.onrender.com//api/auth/verify-email?omnitoken=${omnitoken}" style="background: #007bff; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Go to Dashboard</a>
+                    <a href="https://omni-4ih4.onrender.com/api/auth/verify-email?omnitoken=${omnitoken}" style="background: #007bff; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">Go to Dashboard</a>
                 </div>
             </div>
         </body>
