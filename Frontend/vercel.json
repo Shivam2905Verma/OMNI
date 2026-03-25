@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://omni-4ih4.onrender.com/api/:path*"
+      "destination": "https://omni-production-0d9b.up.railway.app/api/:path*"
     },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
