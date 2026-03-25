@@ -75,7 +75,7 @@ const Register = () => {
           />
           <p>{error ? error : ""}</p>
           <button onClick={(e) => handleRegister(e)} className="btn-style">
-            {loading ? <div className="spinner" /> : "Register"}
+            {loading ? <div className="loadingspinner" /> : "Register"}
           </button>
         </form>
       </div>
