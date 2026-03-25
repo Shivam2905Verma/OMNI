@@ -18,11 +18,10 @@ const sendEmail = async (to, subject, html) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
+    require("dns").setDefaultResultOrder("ipv4first");
+
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      family: 4, // 👈 VERY IMPORTANT (force IPv4)
+      service: "gmail",
       auth: {
         type: "OAuth2",
         user: EMAIL_USER,
