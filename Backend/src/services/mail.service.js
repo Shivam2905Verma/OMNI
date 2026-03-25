@@ -1,47 +1,60 @@
-const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+const { google } = require('googleapis');
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
-const EMAIL_USER = process.env.EMAIL_USER;
-
+/**
+ * Configure OAuth2 client
+ * These values should be in your Render Environment Variables
+ */
 const oAuth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground",
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  'https://developers.google.com/oauthplayground' // Ensure this matches your Google Cloud Console redirect URI
 );
 
-oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+oAuth2Client.setCredentials({ 
+  refresh_token: process.env.REFRESH_TOKEN 
+});
+
+const gmail = google.gmail({ version: 'v1', auth: oAuth2Client });
 
 const sendEmail = async (to, subject, html) => {
   try {
-    const accessToken = await oAuth2Client.getAccessToken();
+    // 1. Create the MIME message
+    // Note: Gmail API expects a specific string format before encoding
+    const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
+    const messageParts = [
+      `From: OMNI <${process.env.EMAIL_USER}>`,
+      `To: ${to}`,
+      'Content-Type: text/html; charset=utf-8',
+      'MIME-Version: 1.0',
+      `Subject: ${utf8Subject}`,
+      '',
+      html,
+    ];
+    const message = messageParts.join('\n');
 
-    require("dns").setDefaultResultOrder("ipv4first");
+    // 2. Base64URL encode the message
+    const encodedMessage = Buffer.from(message)
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: EMAIL_USER,
-        clientId: CLIENT_ID,
-        clientSecret: CLIENT_SECRET,
-        refreshToken: REFRESH_TOKEN,
-        accessToken: accessToken.token,
+    // 3. Send using Gmail API
+    const result = await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: {
+        raw: encodedMessage,
       },
     });
 
-    const info = await transporter.sendMail({
-      from: `"Your App" <${EMAIL_USER}>`,
-      to,
-      subject,
-      html,
-    });
-
-    console.log("Email sent:", info.messageId);
+    console.log("Sending OTP to:", to);
+    console.log("Verification Email sent. ID:", result.data.id);
+    return result.data;
+    
   } catch (error) {
-    console.error("Error sending email:", error);
+    // If the error is 'invalid_grant', your refresh token might be expired or revoked
+    console.error("Error sending Verification email:", error.response ? error.response.data : error);
+    throw error;
   }
 };
 
