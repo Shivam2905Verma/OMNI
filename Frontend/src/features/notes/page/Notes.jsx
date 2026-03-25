@@ -17,6 +17,7 @@ import { NoteContext } from "../NoteProvider";
 import NoteSidebar from "../components/NoteSideBar";
 import AddFolder from "../components/AddFolder";
 import MenuBarMobile from "../components/MenuBarMobile";
+import AddNote from "../components/AddNote";
 
 const DEFAULT_COLORS = [
   { color: "#f87171", name: "" },
@@ -29,7 +30,13 @@ const DEFAULT_COLORS = [
 const Notes = () => {
   const user = useSelector((state) => state.auth.user);
   const laoding = useSelector((state) => state.auth.loading);
-  const { noteLoading, setNoteLoading } = useContext(NoteContext);
+  const {
+    noteLoading,
+    setNoteLoading,
+    showAddNote,
+    setshowAddNote,
+    pillarNameRef,
+  } = useContext(NoteContext);
   const [allpillar, setAllpillar] = useState();
   const [showAddFolder, setshowAddFolder] = useState(false);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
@@ -92,6 +99,8 @@ const Notes = () => {
 
   // ------------- Side bar and menu bar functions END---------------------
 
+  async function handleSaveNote() {}
+
   useEffect(() => {
     if (!laoding && !user) {
       navigate("/login");
@@ -103,7 +112,6 @@ const Notes = () => {
     handleGetStickyNotes();
     handleGetSaveFolderColorNames();
   }, []);
-
 
   if (user && user.verified === false) {
     return (
@@ -119,6 +127,9 @@ const Notes = () => {
 
   return (
     <div className="note-container">
+      <AddNote
+        value={{ pillarNameRef, showAddNote, setshowAddNote, handleSaveNote }}
+      />
       <AddFolder value={{ showAddFolder, setshowAddFolder, setAllpillar }} />
       <MenuBarMobile
         value={{
@@ -167,6 +178,8 @@ const Notes = () => {
         <div className="note-container-right-bottom">
           <Outlet
             context={{
+              showAddNote,
+              setshowAddNote,
               allpillar,
               noteLoading,
               setNoteLoading,

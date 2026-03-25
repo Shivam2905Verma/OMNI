@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { NoteContext } from "../../NoteProvider";
 import NoteCard from "./NoteCard";
 import { useParams } from "react-router-dom";
@@ -7,7 +7,13 @@ import OMNIGraph from "../Graph/OMNIGraph";
 import { useState } from "react";
 
 const AllNotes = () => {
-  const { noteData, noteLoading, handleGetNotes } = useContext(NoteContext);
+  const {
+    noteData,
+    noteLoading,
+    handleGetNotes,
+    showAddNote,
+    setshowAddNote,
+  } = useContext(NoteContext);
   const [seegraph, setSeegraph] = useState(false);
 
   const { pillarId } = useParams();
@@ -28,9 +34,12 @@ const AllNotes = () => {
     <div className="allnotes-container">
       <div className="allnotes-container-top">
         <h1>Notes</h1>
-        <button className="btn-style" onClick={() => setSeegraph(!seegraph)}>
-          {seegraph ? "Back To Notes" : "See In Graph" }
-        </button>
+        <div>
+          <button className="btn-style" onClick={() => setSeegraph(!seegraph)}>
+            {seegraph ? "Back To Notes" : "See In Graph"}
+          </button>
+        
+        </div>
       </div>
       <div className="note-cards">
         {seegraph ? (

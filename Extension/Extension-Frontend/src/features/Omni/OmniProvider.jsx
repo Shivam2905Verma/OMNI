@@ -18,10 +18,10 @@ export const OmniProvider = ({ children }) => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-
+    
     if (!selectedFile) return;
-
+    setFile(selectedFile);
+    
     if (selectedFile.type === "text/plain") {
       const reader = new FileReader();
 

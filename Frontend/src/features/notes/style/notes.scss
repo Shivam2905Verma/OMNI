@@ -225,6 +225,10 @@
     padding: 1rem;
     overflow-y: scroll;
 
+    .note-container-folders-top{
+      @include flex(space-between);
+    }
+
     .note-container-folders-box {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -311,6 +315,10 @@
       font-weight: 600;
       color: #1a1a1a;
       letter-spacing: -0.3px;
+    }
+
+    button {
+      margin-left: 0.5rem;
     }
   }
   .note-cards {

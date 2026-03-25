@@ -1,15 +1,15 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "",
-  withCredentials: true,
-  validateStatus: () => true,
-});
 // const api = axios.create({
-//   baseURL:  "http://localhost:5000",
+//   baseURL: "",
 //   withCredentials: true,
 //   validateStatus: () => true,
 // });
+const api = axios.create({
+  baseURL:  "http://localhost:5000",
+  withCredentials: true,
+  validateStatus: () => true,
+});
 
 export async function getPillars() {
   try {
@@ -106,5 +106,23 @@ export async function getStickyNotes() {
     return res.data;
   } catch (error) {
     throw error.response?.data;
+  }
+}
+
+export async function genrateTagsAndSumaary(formData) {
+  try {
+    const res = await api.post("/api/omni/process-item", formData);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function saveNoteData(formData) {
+  try {
+    const res = await api.post("/api/omni/save-data", formData);
+    return res.data;
+  } catch (error) {
+    throw error;
   }
 }

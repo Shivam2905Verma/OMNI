@@ -5,7 +5,7 @@ import { saveStickyNote } from "../../service/note.api";
 import { toast } from "react-toastify";
 
 const NotesHome = () => {
-  const { allpillar, noteLoading, stickyNotes } =
+  const { allpillar, noteLoading, stickyNotes, showAddNote, setshowAddNote } =
     useOutletContext();
 
   if (noteLoading) {
@@ -16,31 +16,31 @@ const NotesHome = () => {
     );
   }
 
-  async function handleSaveStickyNote(topic, content , noteId) {
+  async function handleSaveStickyNote(topic, content, noteId) {
     if (!content.trim()) {
       toast.error("Please write something before saving!");
       return;
     }
-    
+
     try {
-      const res = await saveStickyNote(topic, content , noteId);
-      if(res.success){
-        toast.success(res.message)
+      const res = await saveStickyNote(topic, content, noteId);
+      if (res.success) {
+        toast.success(res.message);
       }
     } catch (error) {
       console.log("this error is coming from the handle save sticky note");
     }
   }
 
-  async function handleSaveFolder(topic, content) {
-    try {
-    } catch (error) {}
-  }
-
   return (
     <div className="note-container-pillars">
       <div className="note-container-folders">
-        <h2>My Folders</h2>
+        <div className="note-container-folders-top">
+          <h2>My Folders</h2>
+          <button onClick={() => setshowAddNote(true)} className="btn-style">
+            Add Note
+          </button>
+        </div>
         <div className="note-container-folders-box">
           {allpillar?.map((pillar) => {
             return (
