@@ -9,7 +9,7 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const oAuth2Client = new google.auth.OAuth2(
   CLIENT_ID,
   CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground"
+  "https://developers.google.com/oauthplayground",
 );
 
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
@@ -19,7 +19,10 @@ const sendEmail = async (to, subject, html) => {
     const accessToken = await oAuth2Client.getAccessToken();
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      family: 4, // 👈 VERY IMPORTANT (force IPv4)
       auth: {
         type: "OAuth2",
         user: EMAIL_USER,
