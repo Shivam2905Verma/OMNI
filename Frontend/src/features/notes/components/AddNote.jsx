@@ -5,7 +5,7 @@ import { genrateTagsAndSumaary, saveNoteData } from "../service/note.api";
 import { toast } from "react-toastify";
 
 const AddNote = ({ value }) => {
-  const { showAddNote, setshowAddNote } = value;
+  const { showAddNote, setshowAddNote, handleGetPillar } = value;
 
   const [addNoteLoading, setaddNoteLoading] = useState(null);
   const [file, setFile] = useState(null);
@@ -109,6 +109,7 @@ const AddNote = ({ value }) => {
       setshowAddNote(false);
       if (res.success) {
         toast.success(res.message);
+        handleGetPillar();
       } else {
         toast.error(res.message);
       }
