@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { NoteContext } from "../../NoteProvider";
 
 const Search = () => {
-  const { noteLoading, searchedData } = useContext(NoteContext);
+  const { noteLoading, searchedData, setNoteData } = useContext(NoteContext);
   const [seegraph, setSeegraph] = useState(false);
 
   if (noteLoading) {
@@ -31,7 +31,11 @@ const Search = () => {
           <OMNIGraph noteData={searchedData} />
         ) : (
           searchedData?.map((note) => (
-            <NoteCard key={note._id} noteData={note} />
+            <NoteCard
+              key={note._id}
+              noteData={note}
+              setNoteData={setNoteData}
+            />
           ))
         )}
       </div>
