@@ -4,6 +4,8 @@ import ConfirmModal from "../ConfirmationBox";
 
 const FolderDropDown = ({ value }) => {
   const {
+    allpillar,
+  setAllpillar,
     pillarName,
     COLORS,
     dropDown,
@@ -32,6 +34,7 @@ const FolderDropDown = ({ value }) => {
   async function handledeleteFolder() {
     try {
       const res = await deleteFolder(pillarId);
+      setAllpillar(prev => prev.filter(pillar => pillar._id !== pillarId));
       console.log(res);
     } catch (error) {
       console.log(" this is error from handle set folder color");

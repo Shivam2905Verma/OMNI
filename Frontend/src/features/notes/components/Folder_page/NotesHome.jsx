@@ -5,7 +5,7 @@ import { saveStickyNote } from "../../service/note.api";
 import { toast } from "react-toastify";
 
 const NotesHome = () => {
-  const { allpillar, noteLoading, stickyNotes, showAddNote, setshowAddNote } =
+  const { allpillar, setAllpillar , noteLoading, stickyNotes, showAddNote, setshowAddNote } =
     useOutletContext();
 
   if (noteLoading) {
@@ -49,6 +49,8 @@ const NotesHome = () => {
                 pillarName={pillar.pillar}
                 pillarId={pillar._id}
                 pillarColor={pillar.color}
+                allpillar={allpillar}
+                setAllpillar={setAllpillar}
               />
             );
           })}
