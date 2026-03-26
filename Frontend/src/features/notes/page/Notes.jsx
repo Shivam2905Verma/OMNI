@@ -45,7 +45,7 @@ const Notes = () => {
   const [showAddFolder, setshowAddFolder] = useState(false);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
 
-  const [stickyNotes, setStickyNotes] = useState([{}]);
+  const [stickyNotes, setStickyNotes] = useState([]);
   const navigate = useNavigate();
 
   async function handleGetPillar() {

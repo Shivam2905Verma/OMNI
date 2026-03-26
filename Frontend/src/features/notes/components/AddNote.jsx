@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 const AddNote = ({ value }) => {
   const { showAddNote, setshowAddNote, handleGetPillar } = value;
 
-  const [addNoteLoading, setaddNoteLoading] = useState(null);
+  const [generateLoading, setgenerateLoading] = useState(false);
+  const [addNoteLoading, setaddNoteLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [link, setLink] = useState("");
   const [summary, setSummary] = useState("");
@@ -50,7 +51,7 @@ const AddNote = ({ value }) => {
     }
 
     try {
-      setaddNoteLoading(true);
+      setgenerateLoading(true);
       const res = await genrateTagsAndSumaary(formData);
       if (res.success) {
         toast.success(res.message);
@@ -71,7 +72,7 @@ const AddNote = ({ value }) => {
       console.log("this error come from handleGenerate");
       toast.error("There is a error in generating content");
     } finally {
-      setaddNoteLoading(false);
+      setgenerateLoading(false);
     }
   };
 
@@ -190,67 +191,59 @@ const AddNote = ({ value }) => {
           onChange={(e) => setLink(e.target.value)}
         />
         <button className="btn-style" onClick={handleGenerate}>
-          {addNoteLoading ? (
+          {generateLoading ? (
             <div className="loadingspinner" />
           ) : (
             "Generate Tags and get the summary"
           )}
         </button>
 
-        {addNote_Response ? (
-          <form
-            onSubmit={(e) => handleSaveData(e)}
-            className="addnote-response-container"
-          >
-            <input
-              value={pillar}
-              onChange={(e) => setPillar(e.target.value)}
-              className="response-tags input-style"
-              placeholder="Topic.."
-              type="text"
-              required
-            />
-            <input
-              onChange={(e) => setSubTopic(e.target.value)}
-              value={subTopic}
-              className="response-tags input-style"
-              placeholder="SubTopic.."
-              type="text"
-              required
-            />
-            <input
-              onChange={(e) => setManualNote(e.target.value)}
-              value={manualNote}
-              className="response-manual-note input-style"
-              placeholder="Any manual Note..."
-              type="text"
-            />
-            <input
-              onChange={(e) => setTags(e.target.value)}
-              value={tags}
-              className="response-tags input-style"
-              placeholder="Tags must separate by ,"
-              type="text"
-              required
-            />
-            <textarea
-              onChange={(e) => setSummary(e.target.value)}
-              value={summary}
-              placeholder="summary..."
-              className="response-summary input-style"
-              required
-            ></textarea>
-            <button className="btn-style">
-              {addNoteLoading ? (
-                <div className="loadingspinner" />
-              ) : (
-                "Save data"
-              )}
-            </button>
-          </form>
-        ) : (
-          <></>
-        )}
+        <form
+          onSubmit={(e) => handleSaveData(e)}
+          className="addnote-response-container"
+        >
+          <input
+            value={pillar}
+            onChange={(e) => setPillar(e.target.value)}
+            className="response-tags input-style"
+            placeholder="Topic.."
+            type="text"
+            required
+          />
+          <input
+            onChange={(e) => setSubTopic(e.target.value)}
+            value={subTopic}
+            className="response-tags input-style"
+            placeholder="SubTopic.."
+            type="text"
+            required
+          />
+          <input
+            onChange={(e) => setManualNote(e.target.value)}
+            value={manualNote}
+            className="response-manual-note input-style"
+            placeholder="Any manual Note..."
+            type="text"
+          />
+          <input
+            onChange={(e) => setTags(e.target.value)}
+            value={tags}
+            className="response-tags input-style"
+            placeholder="Tags must separate by ,"
+            type="text"
+            required
+          />
+          <textarea
+            onChange={(e) => setSummary(e.target.value)}
+            value={summary}
+            placeholder="summary..."
+            className="response-summary input-style"
+            required
+          ></textarea>
+          <button className="btn-style">
+            {addNoteLoading ? <div className="loadingspinner" /> : "Save data"}
+          </button>
+        </form>
       </div>
     </div>
   );
