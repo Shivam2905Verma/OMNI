@@ -17,7 +17,11 @@ const NoteSidebar = ({ values }) => {
 
   return (
     <div className="note-container-side-bar">
-      <div className="side-bar-top">
+      <div
+        onClick={() => navigate("/")}
+        style={{ cursor: "pointer" }}
+        className="side-bar-top"
+      >
         <h1>OMNI</h1>
       </div>
       <div className="side-bar-middle">
