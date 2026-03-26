@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { NoteContext } from "../../NoteProvider";
 
 const Search = () => {
-  const { noteLoading, searchedData, searchInput } = useContext(NoteContext);
+  const { noteLoading, searchedData } = useContext(NoteContext);
   const [seegraph, setSeegraph] = useState(false);
 
   if (noteLoading) {

@@ -37,7 +37,6 @@ const Notes = () => {
     showAddNote,
     setshowAddNote,
     pillarNameRef,
-    searchedData,
     setSearchedData,
     searchInput,
     setSearchInput,
