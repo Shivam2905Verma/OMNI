@@ -5,7 +5,7 @@ import { getfavouriteNote } from "../../service/note.api";
 import OMNIGraph from "../Graph/OMNIGraph";
 
 const Favourite = () => {
-  const { noteLoading, setNoteLoading } = useContext(NoteContext);
+  const { noteLoading, setNoteLoading , setNoteData } = useContext(NoteContext);
 
   const [favouriteNote, setFavouriteNote] = useState();
   const [seegraph, setSeegraph] = useState(false);
@@ -47,7 +47,7 @@ const Favourite = () => {
           <OMNIGraph noteData={favouriteNote} />
         ) : favouriteNote?.length > 0 ? (
           favouriteNote.map((note) => (
-            <NoteCard key={note._id} noteData={note} />
+            <NoteCard key={note._id} noteData={note} setNoteData={setNoteData}  />
           ))
         ) : (
           <p>No favourite notes yet!</p>
