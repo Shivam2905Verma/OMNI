@@ -1,15 +1,15 @@
 import axios from "axios";
 
-// const api = axios.create({
-//   baseURL: "",
-//   withCredentials: true,
-//   validateStatus: () => true,
-// });
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "",
   withCredentials: true,
   validateStatus: () => true,
 });
+// const api = axios.create({
+//   baseURL: "http://localhost:5000",
+//   withCredentials: true,
+//   validateStatus: () => true,
+// });
 
 export async function login(user, password) {
   let identity = user.trim();
