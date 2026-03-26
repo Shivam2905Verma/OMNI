@@ -45,7 +45,7 @@ dataRouter.post("/add-folder-fromWeb", identifyUser, addFolderFromWeb);
 dataRouter.get("/get-favouriteNote", identifyUser, getfavouriteNote);
 dataRouter.get("/get-StickyNotes", identifyUser, getAllStickyNotes);
 dataRouter.get("/get-save-foldercolorName", identifyUser, getFolderColorName);
-dataRouter.get("/search", identifyUser, searchOmni);
+dataRouter.get("/search/:search", identifyUser, searchOmni);
 dataRouter.get("/get-pillar", identifyUser, getPillars);
 dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
 

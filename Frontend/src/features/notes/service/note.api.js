@@ -1,15 +1,15 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "",
-  withCredentials: true,
-  validateStatus: () => true,
-});
 // const api = axios.create({
-//   baseURL:  "http://localhost:5000",
+//   baseURL: "",
 //   withCredentials: true,
 //   validateStatus: () => true,
 // });
+const api = axios.create({
+  baseURL: "http://localhost:5000",
+  withCredentials: true,
+  validateStatus: () => true,
+});
 
 export async function getPillars() {
   try {
@@ -73,9 +73,12 @@ export async function saveStickyNote(topic, content, noteId) {
   }
 }
 
-export async function setfavouriteNote(noteId) {
+export async function setfavouriteNote(noteId, liked) {
   try {
-    const res = await api.post(`/api/omni/add-favouriteNote`, { noteId });
+    const res = await api.post(`/api/omni/add-favouriteNote`, {
+      noteId,
+      liked,
+    });
     return res.data;
   } catch (error) {
     throw error.response?.data;
@@ -93,7 +96,10 @@ export async function getfavouriteNote() {
 
 export async function addFolderFromWeb(folderName, color) {
   try {
-    const res = await api.post(`/api/omni/add-folder-fromWeb`, { folderName, color });
+    const res = await api.post(`/api/omni/add-folder-fromWeb`, {
+      folderName,
+      color,
+    });
     return res.data;
   } catch (error) {
     throw error.response?.data;
@@ -121,6 +127,14 @@ export async function genrateTagsAndSumaary(formData) {
 export async function saveNoteData(formData) {
   try {
     const res = await api.post("/api/omni/save-data", formData);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function searchData(search) {
+  try {
+    const res = await api.get(`/api/omni/search/${search}`);
     return res.data;
   } catch (error) {
     throw error;

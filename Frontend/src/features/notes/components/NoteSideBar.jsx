@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import userprofile from "../../../assets/userprofile.png";
@@ -15,8 +14,6 @@ const NoteSidebar = ({ values }) => {
 
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
-
-
 
   return (
     <div className="note-container-side-bar">
@@ -76,7 +73,7 @@ const NoteSidebar = ({ values }) => {
           onClick={() => setStickyNotes((prev) => [...prev, {}])}
         >
           <i className="ri-sticky-note-add-line"></i>
-          <p>+ note</p>
+          <p>+ s-note</p>
         </div>
       </div>
 

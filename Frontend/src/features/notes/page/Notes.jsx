@@ -9,6 +9,7 @@ import {
   getSaveFolderColorNames,
   getStickyNotes,
   saveFolderColorNames,
+  searchData,
 } from "../service/note.api";
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
@@ -36,10 +37,15 @@ const Notes = () => {
     showAddNote,
     setshowAddNote,
     pillarNameRef,
+    searchedData,
+    setSearchedData,
+    searchInput,
+    setSearchInput,
   } = useContext(NoteContext);
   const [allpillar, setAllpillar] = useState();
   const [showAddFolder, setshowAddFolder] = useState(false);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
+
   const [stickyNotes, setStickyNotes] = useState([{}]);
   const navigate = useNavigate();
 
@@ -99,7 +105,20 @@ const Notes = () => {
 
   // ------------- Side bar and menu bar functions END---------------------
 
-  async function handleSaveNote() {}
+  async function handleSearch(e) {
+    e.preventDefault();
+
+    try {
+      setNoteLoading(true);
+      const res = await searchData(searchInput);
+      setSearchedData(res.results);
+      console.log(res);
+    } catch (error) {
+      console.log("This error is comming from handlesearch");
+    } finally {
+      setNoteLoading(false);
+    }
+  }
 
   useEffect(() => {
     if (!laoding && !user) {
@@ -127,9 +146,7 @@ const Notes = () => {
 
   return (
     <div className="note-container">
-      <AddNote
-        value={{ pillarNameRef, showAddNote, setshowAddNote, handleSaveNote }}
-      />
+      <AddNote value={{ pillarNameRef, showAddNote, setshowAddNote }} />
       <AddFolder value={{ showAddFolder, setshowAddFolder, setAllpillar }} />
       <MenuBarMobile
         value={{
@@ -156,17 +173,29 @@ const Notes = () => {
             handleNameChange,
             handleSaveFolderColorNames,
             handleGetSaveFolderColorNames,
+            handleSearch,
           }}
         />
       </div>
       <div className="note-container-right">
         <div className="note-container-right-top">
           <h1>MY NOTES</h1>
-          <form className="note-container-search">
-            <input className="input-style" type="text" placeholder="search" />
-            <button className="btn-style">
-              {noteLoading ? <div className="loadingspinner" /> : "search"}
-            </button>
+          <form
+            onSubmit={(e) => {
+              navigate(`/notes/search/${searchInput}`);
+              handleSearch(e);
+            }}
+            className="note-container-search"
+          >
+            <input
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="input-style"
+              type="text"
+              placeholder="search"
+              required
+            />
+            <button className="btn-style">search</button>
           </form>
           <div
             onClick={() => setMenuBarOpen(true)}

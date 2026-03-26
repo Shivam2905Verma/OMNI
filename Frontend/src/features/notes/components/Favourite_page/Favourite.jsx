@@ -5,17 +5,20 @@ import { getfavouriteNote } from "../../service/note.api";
 import OMNIGraph from "../Graph/OMNIGraph";
 
 const Favourite = () => {
-  const { noteLoading } = useContext(NoteContext);
+  const { noteLoading, setNoteLoading } = useContext(NoteContext);
 
   const [favouriteNote, setFavouriteNote] = useState();
   const [seegraph, setSeegraph] = useState(false);
 
   async function handleFavouriteNotes() {
     try {
+      setNoteLoading(true);
       const res = await getfavouriteNote();
       setFavouriteNote(res.notes);
     } catch (error) {
       console.log("this error is coming from handle set Favourite Notes");
+    } finally {
+      setNoteLoading(false);
     }
   }
 
@@ -36,7 +39,7 @@ const Favourite = () => {
       <div className="allnotes-container-top">
         <h1>Favourite Notes</h1>
         <button className="btn-style" onClick={() => setSeegraph(!seegraph)}>
-          {seegraph ? "Back To Notes" : "See In Graph" }
+          {seegraph ? "Back To Notes" : "See In Graph"}
         </button>
       </div>
       <div className="note-cards">

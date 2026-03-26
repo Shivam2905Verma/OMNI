@@ -18,10 +18,10 @@ export const OmniProvider = ({ children }) => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    
+
     if (!selectedFile) return;
     setFile(selectedFile);
-    
+
     if (selectedFile.type === "text/plain") {
       const reader = new FileReader();
 
@@ -50,16 +50,16 @@ export const OmniProvider = ({ children }) => {
     try {
       setLoading(true);
       const res = await processData(formData);
-      setSummary(res.summary);
-      setPillar(res.pillar);
-      setSubTopic(res.subtopic);
-      res?.tags.forEach((tag) => {
+      setSummary(res.generated.summary);
+      setPillar(res.generated.pillar);
+      setSubTopic(res.generated.subtopic);
+      res?.generated.tags.forEach((tag) => {
         setTags((pre) => pre + " " + `, ${tag} `);
       });
 
       console.log(res);
-      setTags(res.tags);
-      setData(res);
+      setTags(res.generated.tags);
+      setData(res.generated);
     } catch (error) {
       console.log("this error come from handleGenerate");
     } finally {

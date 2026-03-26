@@ -8,6 +8,8 @@ export const NoteProvider = ({ children }) => {
   const [noteData, setNoteData] = useState();
   const [noteLoading, setNoteLoading] = useState(false);
   const [showAddNote, setshowAddNote] = useState(false);
+  const [searchedData, setSearchedData] = useState();
+  const [searchInput, setSearchInput] = useState("");
 
   async function handleGetNotes(pillarId) {
     try {
@@ -31,6 +33,10 @@ export const NoteProvider = ({ children }) => {
         noteLoading,
         setNoteLoading,
         handleGetNotes,
+        searchedData,
+        setSearchedData,
+        searchInput,
+        setSearchInput,
       }}
     >
       {children}

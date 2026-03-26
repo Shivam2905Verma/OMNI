@@ -67,7 +67,11 @@ const generateTags = async (req, res) => {
     const result = await model.generateContent(promptParts);
     const responseText = result.response.text();
 
-    res.json(JSON.parse(responseText));
+    res.status(200).json({
+      message: "content generated successfully",
+      success: true,
+      generated: JSON.parse(responseText),
+    });
   } catch (error) {
     console.error("Processing error:", error);
     res.status(500).json({ error: "Failed to process item with AI." });
@@ -218,9 +222,13 @@ const addFolderFromWeb = async (req, res) => {
 
 const searchOmni = async (req, res) => {
   try {
-    const { search } = req.body;
-    if (!search)
+    console.log(req.params);
+    const { search } = req.params;
+
+    if (!search || typeof search !== "string" || search.trim().length === 0)
       return res.status(400).json({ message: "Search query is required" });
+
+    const sanitizedSearch = search.trim().slice(0, 500); // prevent prompt injection / huge inputs
 
     const prompt = `
 You are an intelligent search query analyzer.
@@ -246,30 +254,57 @@ Important:
 - Do not explain anything
 - Do not add extra text outside JSON
 
-User Query: "${search}"
+User Query: "${sanitizedSearch}"
 `;
 
-    const modelres = await searchModel.generateContent(prompt);
+    let parsedQuery;
+    try {
+      const modelres = await searchModel.generateContent(prompt);
+      const rawText = modelres.response.text().trim();
+
+      const cleanText = rawText
+        .replace(/^```(?:json)?\s*/i, "")
+        .replace(/\s*```$/, "");
+      parsedQuery = JSON.parse(cleanText);
+    } catch (parseErr) {
+      console.error("AI parse error:", parseErr);
+      parsedQuery = {
+        searchPillar: "",
+        searchSubtopic: "",
+        searchTags: [],
+        searchSummary: sanitizedSearch,
+      };
+    }
 
     const { searchPillar, searchSubtopic, searchTags, searchSummary } =
-      JSON.parse(modelres.response.text());
+      parsedQuery;
 
-    const queryText = `
-User is searching for: ${search}.
+    const queryText = [
+      `User is searching for: ${sanitizedSearch}.`,
+      searchPillar ? `Category: ${searchPillar}.` : "",
+      searchSubtopic ? `Subtopic: ${searchSubtopic}.` : "",
+      searchTags?.length ? `Tags: ${searchTags.join(", ")}.` : "",
+      searchSummary ? `Description: ${searchSummary}.` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
 
-Category: ${searchPillar}.
-Subtopic: ${searchSubtopic}.
-Tags: ${searchTags.join(", ")}.
+    let queryVector;
+    try {
+      const result = await embeddingModel.embedContent({
+        content: { parts: [{ text: queryText }] },
+        taskType: "RETRIEVAL_QUERY",
+        outputDimensionality: 768,
+      });
 
-Description: ${searchSummary}.
-`;
-
-    const result = await embeddingModel.embedContent({
-      content: { parts: [{ text: queryText }] },
-      taskType: "RETRIEVAL_QUERY",
-      outputDimensionality: 768,
-    });
-    const queryVector = result.embedding.values;
+      queryVector = result.embedding.values;
+    } catch (embedErr) {
+      console.error("Embedding error:", embedErr);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to generate search embedding",
+      });
+    }
 
     const results = await noteModel.aggregate([
       {
@@ -288,13 +323,37 @@ Description: ${searchSummary}.
           score: { $meta: "vectorSearchScore" },
           summary: 1,
           pillar: 1,
+          pillarId: 1,
           subtopic: 1,
           url: 1,
           tags: 1,
           imageurl: 1,
           aboutFile: 1,
           manualNote: 1,
+          favourite: 1,
+          embedding: 1,
           createdAt: 1,
+        },
+      },
+      {
+        $match: {
+          score: { $gte: 0.79 },
+        },
+      },
+
+      {
+        $lookup: {
+          from: "pillars", // ⚠️ your actual MongoDB collection name (usually lowercase + plural)
+          localField: "pillarId",
+          foreignField: "_id",
+          as: "pillarId", // overwrites the pillarId field with full object
+        },
+      },
+      // $lookup returns an array, convert it back to single object
+      {
+        $unwind: {
+          path: "$pillarId",
+          preserveNullAndEmptyArrays: true, // ✅ won't crash if pillarId is missing
         },
       },
     ]);
@@ -445,9 +504,12 @@ const getAllStickyNotes = async (req, res) => {
 
 const setfavouriteNote = async (req, res) => {
   try {
-    const { noteId } = req.body;
+    const { noteId, liked } = req.body;
+    console.log(liked);
 
-    const note = await noteModel.findByIdAndUpdate(noteId, { favourite: true });
+    const note = await noteModel.findByIdAndUpdate(noteId, {
+      favourite: liked,
+    });
 
     if (!note) {
       return res
@@ -471,10 +533,12 @@ const setfavouriteNote = async (req, res) => {
 
 const getfavouriteNote = async (req, res) => {
   try {
-    const notes = await noteModel.find({
-      userId: req.user.id,
-      favourite: true,
-    }).populate("pillarId");
+    const notes = await noteModel
+      .find({
+        userId: req.user.id,
+        favourite: true,
+      })
+      .populate("pillarId");
 
     res.status(200).json({
       message: "fetched favourite notes",

@@ -11,8 +11,6 @@ const AllNotes = () => {
     noteData,
     noteLoading,
     handleGetNotes,
-    showAddNote,
-    setshowAddNote,
   } = useContext(NoteContext);
   const [seegraph, setSeegraph] = useState(false);
 

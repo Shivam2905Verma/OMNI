@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import { setfavouriteNote } from "../../service/note.api";
 
 const NoteCard = ({ noteData }) => {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState();
 
-  async function HandleSetfavouriteNote(e, noteId) {
+  async function HandleSetfavouriteNote(e, noteId, liked) {
     e.preventDefault();
     e.stopPropagation();
 
     try {
-      const res = await setfavouriteNote(noteId);
-      setLiked(res.success);
+      const res = await setfavouriteNote(noteId, liked);
+      console.log(res);
     } catch (error) {
       console.log("This error is coming from add favourite note");
     }
@@ -47,7 +47,11 @@ const NoteCard = ({ noteData }) => {
       {/* Heart button */}
       <div
         className={`note-card-heart ${liked ? "liked" : ""}`}
-        onClick={(e) => HandleSetfavouriteNote(e, noteData._id)}
+        onClick={(e) => {
+          const newLiked = !liked; 
+          setLiked(newLiked); 
+          HandleSetfavouriteNote(e, noteData._id, newLiked); 
+        }}
       >
         <i className={liked ? "ri-heart-3-fill" : "ri-heart-3-line"}></i>
       </div>

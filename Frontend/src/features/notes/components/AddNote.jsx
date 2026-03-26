@@ -2,9 +2,12 @@ import "../style/addnote.scss";
 import dragDrop from "../../../assets/drag-and-drop.png";
 import { useState } from "react";
 import { genrateTagsAndSumaary, saveNoteData } from "../service/note.api";
+import { toast } from "react-toastify";
 
 const AddNote = ({ value }) => {
-  const { showAddNote, setshowAddNote, noteLoading, setNoteLoading } = value;
+  const { showAddNote, setshowAddNote } = value;
+
+  const [addNoteLoading, setaddNoteLoading] = useState(null);
   const [file, setFile] = useState(null);
   const [link, setLink] = useState("");
   const [summary, setSummary] = useState("");
@@ -47,26 +50,33 @@ const AddNote = ({ value }) => {
     }
 
     try {
-      setNoteLoading(true);
+      setaddNoteLoading(true);
       const res = await genrateTagsAndSumaary(formData);
-      setSummary(res.summary);
-      setPillar(res.pillar);
-      setSubTopic(res.subtopic);
-      res?.tags.forEach((tag) => {
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+      setSummary(res.generated.summary);
+      setPillar(res.generated.pillar);
+      setSubTopic(res.generated.subtopic);
+      res?.generated.tags.forEach((tag) => {
         setTags((pre) => pre + " " + `, ${tag} `);
       });
 
       console.log(res);
-      setTags(res.tags);
-      setaddNote_Response(res);
+      setTags(res.generated.tags);
+      setaddNote_Response(res.generated);
     } catch (error) {
       console.log("this error come from handleGenerate");
+      toast.error("There is a error in generating content");
     } finally {
-      setNoteLoading(false);
+      setaddNoteLoading(false);
     }
   };
 
-  async function handleSaveData() {
+  async function handleSaveData(e) {
+    e.preventDefault();
     const formData = new FormData();
 
     if (file) {
@@ -85,18 +95,27 @@ const AddNote = ({ value }) => {
     formData.append("summary", summary);
 
     try {
-      setNoteLoading(true);
+      setaddNoteLoading(true);
       const res = await saveNoteData(formData);
       console.log(res);
-      setData("");
       setLink("");
       setManualNote("");
+      setPillar("");
+      setSubTopic("");
+      setTags("");
+      setSummary("");
       setFile(null);
       setFilePreview(null);
+      setshowAddNote(false);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
     } catch (error) {
       console.log("this error come from saveData");
     } finally {
-      setNoteLoading(false);
+      setaddNoteLoading(false);
     }
   }
 
@@ -114,7 +133,7 @@ const AddNote = ({ value }) => {
         <div className="addnote-box-top">
           <h3>Add a note</h3>
           <p onClick={() => setshowAddNote(false)}>
-            <i class="ri-close-large-line"></i>
+            <i className="ri-close-large-line"></i>
           </p>
         </div>
         <label
@@ -170,15 +189,18 @@ const AddNote = ({ value }) => {
           onChange={(e) => setLink(e.target.value)}
         />
         <button className="btn-style" onClick={handleGenerate}>
-          {noteLoading ? (
-            <div className="spinner" />
+          {addNoteLoading ? (
+            <div className="loadingspinner" />
           ) : (
             "Generate Tags and get the summary"
           )}
         </button>
 
         {addNote_Response ? (
-          <form className="addnote-response-container">
+          <form
+            onSubmit={(e) => handleSaveData(e)}
+            className="addnote-response-container"
+          >
             <input
               value={pillar}
               onChange={(e) => setPillar(e.target.value)}
@@ -201,13 +223,12 @@ const AddNote = ({ value }) => {
               className="response-manual-note input-style"
               placeholder="Any manual Note..."
               type="text"
-              required
             />
             <input
               onChange={(e) => setTags(e.target.value)}
               value={tags}
               className="response-tags input-style"
-              placeholder="tags..."
+              placeholder="Tags must separate by ,"
               type="text"
               required
             />
@@ -218,8 +239,12 @@ const AddNote = ({ value }) => {
               className="response-summary input-style"
               required
             ></textarea>
-            <button className="btn-style" onClick={handleSaveData}>
-              {noteLoading ? <div className="spinner" /> : "Save data"}
+            <button className="btn-style">
+              {addNoteLoading ? (
+                <div className="loadingspinner" />
+              ) : (
+                "Save data"
+              )}
             </button>
           </form>
         ) : (

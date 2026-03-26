@@ -8,7 +8,7 @@ import { NoteProvider } from "./features/notes/NoteProvider";
 import DetailNote from "./features/notes/components/Detail_NotePage/DetailNote";
 import AllNotes from "./features/notes/components/Notes_Page/AllNotes";
 import Favourite from "./features/notes/components/Favourite_page/Favourite";
-import OMNIGraph from "./features/notes/components/Graph/OMNIGraph";
+import Search from "./features/notes/components/Searched_page/Search";
 
 function BrowserApp() {
   return (
@@ -25,6 +25,7 @@ function BrowserApp() {
         }
       >
         <Route index element={<NotesHome />} />
+        <Route path="search/:search" element={<Search />} />
         <Route path="favourite-notes" element={<Favourite />} />
         <Route path=":pillarId" element={<AllNotes />} />
         <Route path=":pillarId/note/:noteId" element={<DetailNote />} />
