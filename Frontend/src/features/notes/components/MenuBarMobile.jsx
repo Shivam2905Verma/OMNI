@@ -23,7 +23,9 @@ const MenuBarMobile = ({ value }) => {
       style={menuBarOpen ? { right: "0%" } : { right: "-100%" }}
     >
       <div className="menuBar-mobile-top">
-        <h1>Omni</h1>
+        <h1 onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+          Omni
+        </h1>
         <i onClick={() => setMenuBarOpen(false)} className="ri-close-fill"></i>
       </div>
 
