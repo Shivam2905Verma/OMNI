@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { deleteNote, setfavouriteNote } from "../../service/note.api";
 import ConfirmModal from "../ConfirmationBox";
 
-const NoteCard = ({ noteData }) => {
+const NoteCard = ({ noteData, setNoteData }) => {
   const [liked, setLiked] = useState();
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const description = `You are about to delete`;
@@ -11,18 +11,19 @@ const NoteCard = ({ noteData }) => {
 
   async function handleDeleteNote() {
     try {
-      const res = await deleteNote(noteData._id)
-      console.log(res)
+      const res = await deleteNote(noteData._id);
+      console.log(res);
+      setNoteData((pre) => pre.filter((el) => el._id !== noteData._id));
     } catch (error) {
-      console.log("This error is coming from handle Delete note")
+      console.log("This error is coming from handle Delete note");
     }
-    setConfirmationOpen(false)
+    setConfirmationOpen(false);
   }
-  
+
   async function handleOnCancelDeleteNote(e) {
-    e.preventDefault()
-    e.stopPropagation()
-    setConfirmationOpen(false)
+    e.preventDefault();
+    e.stopPropagation();
+    setConfirmationOpen(false);
   }
 
   async function HandleSetfavouriteNote(e, noteId, liked) {
@@ -80,7 +81,7 @@ const NoteCard = ({ noteData }) => {
           className={`note-card-heart ${liked ? "liked" : ""}`}
           onClick={(e) => {
             e.stopPropagation();
-            e.preventDefault()
+            e.preventDefault();
             setConfirmationOpen(true);
           }}
         >

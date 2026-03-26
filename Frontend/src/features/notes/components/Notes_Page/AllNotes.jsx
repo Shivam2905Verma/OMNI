@@ -9,6 +9,7 @@ import { useState } from "react";
 const AllNotes = () => {
   const {
     noteData,
+    setNoteData,
     noteLoading,
     handleGetNotes,
   } = useContext(NoteContext);
@@ -43,7 +44,7 @@ const AllNotes = () => {
         {seegraph ? (
           <OMNIGraph noteData={noteData} />
         ) : (
-          noteData?.map((note) => <NoteCard key={note._id} noteData={note} />)
+          noteData?.map((note) => <NoteCard key={note._id} noteData={note} setNoteData={setNoteData} />)
         )}
       </div>
     </div>

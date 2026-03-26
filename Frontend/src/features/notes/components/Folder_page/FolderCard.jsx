@@ -37,7 +37,7 @@ const FolderCard = ({
         <FolderDropDown
           value={{
             allpillar,
-  setAllpillar,
+            setAllpillar,
             pillarName,
             COLORS,
             dropDown,

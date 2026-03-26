@@ -145,8 +145,9 @@ const Notes = () => {
 
   return (
     <div className="note-container">
-      
-      <AddNote value={{ pillarNameRef, showAddNote, setshowAddNote  , handleGetPillar}} />
+      <AddNote
+        value={{ pillarNameRef, showAddNote, setshowAddNote, handleGetPillar }}
+      />
       <AddFolder value={{ showAddFolder, setshowAddFolder, setAllpillar }} />
       <MenuBarMobile
         value={{
@@ -210,6 +211,7 @@ const Notes = () => {
               showAddNote,
               setshowAddNote,
               allpillar,
+              setAllpillar,
               noteLoading,
               setNoteLoading,
               stickyNotes,
