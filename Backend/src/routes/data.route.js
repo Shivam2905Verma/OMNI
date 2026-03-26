@@ -14,9 +14,13 @@ const {
   getAllStickyNotes,
   setfavouriteNote,
   getfavouriteNote,
-  addFolderFromWeb
+  addFolderFromWeb,
 } = require("../controllers/omni.controller");
 const identifyUser = require("../middleware/identifyUser");
+const {
+  deleteFolder,
+  deleteNote,
+} = require("../controllers/omni.delete.controller");
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -48,5 +52,8 @@ dataRouter.get("/get-save-foldercolorName", identifyUser, getFolderColorName);
 dataRouter.get("/search/:search", identifyUser, searchOmni);
 dataRouter.get("/get-pillar", identifyUser, getPillars);
 dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
+dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
+dataRouter.delete("/delete-folder", identifyUser, deleteFolder);
+dataRouter.delete("/delete-note", identifyUser, deleteNote);
 
 module.exports = dataRouter;

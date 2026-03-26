@@ -273,8 +273,30 @@
         border: 1px solid gray;
         border-radius: 0.5rem;
         padding: 0.5rem;
-        display: flex;
-        gap: 0.4rem;
+        
+        .folder-dropdown-colors-container{
+          display: flex;
+          gap: 0.4rem;
+        }
+
+        .folder-dropdown-update-delete{
+          margin-top: 0.5rem;
+
+          input{
+            padding: 0.5rem;
+          }
+
+          .folder-dropdown-update-delete-btns{
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+
+            .btn-style:hover{
+              transform: translateY(-5px);
+            }
+          }
+
+        }
       }
 
       .ri-more-line {
@@ -293,7 +315,7 @@
 
 .folder-card-container:hover {
   transform: translateY(-10px);
-  box-shadow: 10px 10px 10px black;
+  box-shadow: 10px 10px 10px rgb(105, 105, 105);
 }
 
 .loader-container-page {
@@ -411,10 +433,15 @@
       transform 0.2s ease;
   }
 
-  .note-card-heart {
+  .note-card-btns{
     position: absolute;
     top: 0.75rem;
     right: 0.75rem;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .note-card-heart {
     width: 32px;
     height: 32px;
     border-radius: 50%;

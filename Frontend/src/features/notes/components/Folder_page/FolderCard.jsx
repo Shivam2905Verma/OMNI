@@ -30,6 +30,7 @@ const FolderCard = ({ pillarName, pillarId, pillarColor }) => {
 
         <FolderDropDown
           value={{
+            pillarName,
             COLORS,
             dropDown,
             setDropDown,

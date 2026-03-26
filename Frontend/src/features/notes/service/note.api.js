@@ -1,15 +1,15 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "",
-  withCredentials: true,
-  validateStatus: () => true,
-});
 // const api = axios.create({
-//   baseURL: "http://localhost:5000",
+//   baseURL: "",
 //   withCredentials: true,
 //   validateStatus: () => true,
 // });
+const api = axios.create({
+  baseURL: "http://localhost:5000",
+  withCredentials: true,
+  validateStatus: () => true,
+});
 
 export async function getPillars() {
   try {
@@ -132,9 +132,32 @@ export async function saveNoteData(formData) {
     throw error;
   }
 }
+
 export async function searchData(search) {
   try {
     const res = await api.get(`/api/omni/search/${search}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteFolder(pillarId) {
+  try {
+    const res = await api.delete(`/api/omni/delete-folder`, {
+      data: { pillarId },
+    });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function deleteNote(noteId) {
+  try {
+    const res = await api.delete(`/api/omni/delete-note`, {
+      data: { noteId },
+    });
     return res.data;
   } catch (error) {
     throw error;
