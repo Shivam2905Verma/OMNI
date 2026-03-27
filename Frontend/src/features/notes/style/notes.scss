@@ -479,6 +479,7 @@ $secondary-text: #4a4a4b;
 $accent-color: #3b82f6;
 $border-radius: 16px;
 
+// ── DetailNote container ──────────────────────────────────────────────────────
 .detail-note-container {
   max-width: 500px;
   margin: 0 auto;
@@ -486,14 +487,14 @@ $border-radius: 16px;
   background-color: $card-bg;
   border-radius: $border-radius;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  font-family:
-    "Quicksand", sans-serif; // Using that geometric font we discussed
+  font-family: "Quicksand", sans-serif;
   color: $primary-text;
 
   @media (max-width: 768px) {
     width: 100%;
     max-width: 100%;
   }
+
 
   h1 {
     font-size: 2rem;
@@ -503,16 +504,6 @@ $border-radius: 16px;
     color: $primary-text;
   }
 
-  img {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: $border-radius - 4px;
-    margin-bottom: 24px;
-    display: block;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
   h3 {
     font-size: 1.1rem;
     font-weight: 600;
@@ -520,7 +511,6 @@ $border-radius: 16px;
     line-height: 1.6;
     color: $secondary-text;
 
-    // Specific styling for the labels
     &::before {
       content: "•";
       margin-right: 8px;
@@ -528,7 +518,6 @@ $border-radius: 16px;
     }
   }
 
-  // Formatting tags to look like pills
   .tags-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -544,7 +533,6 @@ $border-radius: 16px;
     }
   }
 
-  // Make the URL clickable/blue
   .url-text {
     color: $accent-color;
     word-break: break-all;
@@ -555,6 +543,64 @@ $border-radius: 16px;
   }
 }
 
+// ── Image ─────────────────────────────────────────────────────────────────────
+.detail-note__image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: $border-radius - 4px;
+  margin-bottom: 24px;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+
+}
+
+// ── Text file textarea ────────────────────────────────────────────────────────
+.detail-note__textarea {
+  width: 100%;
+  min-height: 200px;
+  max-height: 400px;
+  resize: vertical;
+  padding: 12px;
+  margin-bottom: 24px;
+  border-radius: $border-radius - 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: $bg-color;
+  color: $primary-text;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  outline: none;
+  box-sizing: border-box;
+}
+
+// ── PDF link ──────────────────────────────────────────────────────────────────
+.detail-note__pdf-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 10px 18px;
+  border-radius: $border-radius - 4px;
+  background: $bg-color;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: $accent-color;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  max-width: 100%;
+  overflow: hidden;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ── Loading text ──────────────────────────────────────────────────────────────
+.file-loading {
+  color: $secondary-text;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
 @media (max-width: 1024px) {
   .note-container
     .note-container-right

@@ -70,7 +70,7 @@ const FolderDropDown = ({ value }) => {
               {folderColor.bg === color.bg && (
                 <i
                   className="ri-check-line"
-                  style={{ color: color.icon }} // tick uses icon color
+                  style={{ color: color.icon }} 
                 />
               )}
             </div>
@@ -80,6 +80,7 @@ const FolderDropDown = ({ value }) => {
           <input
             className="input-style"
             type="text"
+            maxLength={30}
             placeholder="Update Folder name..."
             value={updatePillarName}
             onChange={(e) => setUpdatePillarName(e.target.value)}

@@ -86,12 +86,29 @@ const saveOmniData = async (req, res) => {
     let imageUrl;
 
     if (req.file) {
-      const image = await client.files.upload({
-        file: await toFile(Buffer.from(req.file.buffer), "file"),
-        fileName: "fileName",
+      const allowedTypes = [
+        "application/pdf",
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+        "image/webp",
+        "text/plain",
+      ];
+
+      if (!allowedTypes.includes(req.file.mimetype)) {
+        return res.status(400).json({
+          message: "Only PDF and Image files are allowed",
+          success: false,
+        });
+      }
+
+      const uploadedFile = await client.files.upload({
+        file: await toFile(req.file.buffer, req.file.originalname),
+        fileName: req.file.originalname,
       });
 
-      imageUrl = image.url;
+      imageUrl = uploadedFile.url;
+
     }
 
     let pillarID;
@@ -447,6 +464,8 @@ const getPillars = async (req, res) => {
     pillars,
   });
 };
+
+const updatePillarName = async (req, res) => {};
 
 const getDataforPillar = async (req, res) => {
   const decoded = req.user;

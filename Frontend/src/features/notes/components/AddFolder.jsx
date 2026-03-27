@@ -51,6 +51,7 @@ const AddFolder = ({ value }) => {
           required
           className="input-style"
           type="text"
+          maxLength={30}
           placeholder="Folder Name"
           value={folderName}
           onChange={(e) => setFolderName(e.target.value)}
