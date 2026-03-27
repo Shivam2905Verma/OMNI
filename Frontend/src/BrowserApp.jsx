@@ -9,6 +9,7 @@ import DetailNote from "./features/notes/components/Detail_NotePage/DetailNote";
 import AllNotes from "./features/notes/components/Notes_Page/AllNotes";
 import Favourite from "./features/notes/components/Favourite_page/Favourite";
 import Search from "./features/notes/components/Searched_page/Search";
+import NotFound from "./features/notes/components/Not_FoundPage/NotFound";
 
 function BrowserApp() {
   return (
@@ -29,7 +30,9 @@ function BrowserApp() {
         <Route path="favourite-notes" element={<Favourite />} />
         <Route path=":pillarId" element={<AllNotes />} />
         <Route path=":pillarId/note/:noteId" element={<DetailNote />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
