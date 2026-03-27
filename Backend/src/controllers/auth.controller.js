@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const register = async (req, res) => {
   const { email, username, password } = req.body;
   try {
-    // format check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({
@@ -34,14 +33,12 @@ const register = async (req, res) => {
       });
     }
 
-    // hash password before putting in token
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 👇 temp token — no DB yet
     const token = jwt.sign(
       { email, username, password: hashedPassword },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }, // expires in 15 minutes
+      { expiresIn: "15m" }, 
     );
 
     await sendEmail(
@@ -87,15 +84,12 @@ const verify_Email = async (req, res) => {
     });
 
     if (isUserExist) {
-      // 👇 already verified, just send them to login instead of erroring
       return res.send(html);
     }
 
     const user = await UserModel.create({ email, username, password });
 
-    // 👇 no cookie here — it won't work cross domain
-    // just show the success page and let them login manually
-const html = `
+    const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>

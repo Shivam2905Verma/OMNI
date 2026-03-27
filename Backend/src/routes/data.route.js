@@ -15,6 +15,7 @@ const {
   setfavouriteNote,
   getfavouriteNote,
   addFolderFromWeb,
+  updatePillarName,
 } = require("../controllers/omni.controller");
 const identifyUser = require("../middleware/identifyUser");
 const {
@@ -55,5 +56,6 @@ dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
 dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
 dataRouter.delete("/delete-folder", identifyUser, deleteFolder);
 dataRouter.delete("/delete-note", identifyUser, deleteNote);
+dataRouter.patch("/update-pillarName", identifyUser, updatePillarName);
 
 module.exports = dataRouter;

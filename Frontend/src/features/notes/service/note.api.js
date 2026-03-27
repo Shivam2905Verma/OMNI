@@ -20,13 +20,15 @@ export async function getPillars() {
   }
 }
 
-export async function updatePillarName(){
+export async function updatePillarNameAPI(pillarId, updatedName) {
   try {
-   const res =  await api.patch("")
-   return res.data;
+    const res = await api.patch("/api/omni/update-pillarName", {
+      pillarId,
+      updatedName,
+    });
+    return res.data;
   } catch (error) {
     throw error;
-    
   }
 }
 

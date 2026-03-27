@@ -466,8 +466,29 @@ const getPillars = async (req, res) => {
 
 const updatePillarName = async (req, res) => {
   try {
+    console.log(req.body);
+    const { pillarId, updatedName } = req.body;
+
+    const isExisted = await pillarModel.findById(pillarId);
     
+    if (!isExisted) {
+      return res.status(404).json({
+        message: "There is no folder with this ID",
+        success: false,
+      });
+    }
+
+    const updated = await pillarModel.findByIdAndUpdate(pillarId, {
+      pillar: updatedName,
+    });
+
+    return res.status(200).json({
+      message: "Pillar Name is updated successfully",
+      success: true,
+      updated,
+    });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: "There is a error in updating pillar name",
       success: false,
@@ -595,4 +616,5 @@ module.exports = {
   setfavouriteNote,
   getfavouriteNote,
   addFolderFromWeb,
+  updatePillarName,
 };

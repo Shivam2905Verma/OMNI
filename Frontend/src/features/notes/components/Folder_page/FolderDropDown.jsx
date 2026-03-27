@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { deleteFolder, setFolderColorfunc } from "../../service/note.api";
+import {
+  deleteFolder,
+  setFolderColorfunc,
+  updatePillarNameAPI,
+} from "../../service/note.api";
 import ConfirmModal from "../ConfirmationBox";
 
 const FolderDropDown = ({ value }) => {
@@ -33,6 +37,7 @@ const FolderDropDown = ({ value }) => {
   async function handledeleteFolder() {
     try {
       const res = await deleteFolder(pillarId);
+
       setAllpillar((prev) => prev.filter((pillar) => pillar._id !== pillarId));
     } catch (error) {
       console.log(" this is error from handle set folder color");
@@ -46,8 +51,17 @@ const FolderDropDown = ({ value }) => {
     setConfirmationOpen(false);
   }
 
-  async function handleUpdatePillarName(){
-    
+  async function handleUpdatePillarName(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      const res = await updatePillarNameAPI(pillarId, updatePillarName);
+      console.log(res);
+      setDropDown(false);
+    } catch (error) {
+      console.log(" this is error from update Pillar Name ", error);
+    }
   }
 
   return (
@@ -73,10 +87,7 @@ const FolderDropDown = ({ value }) => {
               }}
             >
               {folderColor.bg === color.bg && (
-                <i
-                  className="ri-check-line"
-                  style={{ color: color.icon }} 
-                />
+                <i className="ri-check-line" style={{ color: color.icon }} />
               )}
             </div>
           ))}
@@ -93,7 +104,10 @@ const FolderDropDown = ({ value }) => {
 
           <div className="folder-dropdown-update-delete-btns">
             <button
-              onClick={() => console.log("click")}
+              onClick={(e) => {
+                handleUpdatePillarName(e, pillarId);
+                console.log("click");
+              }}
               className="folder-dropdown-update-btn btn-style"
             >
               Update
