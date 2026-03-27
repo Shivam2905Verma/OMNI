@@ -193,6 +193,22 @@ const saveOmniData = async (req, res) => {
   }
 };
 
+const getAllNotes = async (req, res) => {
+  try {
+    const allNotes = await noteModel.find({ userId: req.user.id });
+    return res.status(200).json({
+      message: "All notes fetched successfully",
+      success: true,
+      allNotes,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "An internal error occurred",
+      success: false,
+    });
+  }
+};
+
 const addFolderFromWeb = async (req, res) => {
   try {
     const { folderName, color } = req.body;
@@ -470,7 +486,7 @@ const updatePillarName = async (req, res) => {
     const { pillarId, updatedName } = req.body;
 
     const isExisted = await pillarModel.findById(pillarId);
-    
+
     if (!isExisted) {
       return res.status(404).json({
         message: "There is no folder with this ID",
@@ -617,4 +633,5 @@ module.exports = {
   getfavouriteNote,
   addFolderFromWeb,
   updatePillarName,
+  getAllNotes,
 };

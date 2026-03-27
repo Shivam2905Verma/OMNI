@@ -16,6 +16,7 @@ const {
   getfavouriteNote,
   addFolderFromWeb,
   updatePillarName,
+  getAllNotes,
 } = require("../controllers/omni.controller");
 const identifyUser = require("../middleware/identifyUser");
 const {
@@ -52,6 +53,7 @@ dataRouter.get("/get-StickyNotes", identifyUser, getAllStickyNotes);
 dataRouter.get("/get-save-foldercolorName", identifyUser, getFolderColorName);
 dataRouter.get("/search/:search", identifyUser, searchOmni);
 dataRouter.get("/get-pillar", identifyUser, getPillars);
+dataRouter.get("/get-AllNotes", identifyUser, getAllNotes);
 dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
 dataRouter.get("/notes/:pillarId", identifyUser, getDataforPillar);
 dataRouter.delete("/delete-folder", identifyUser, deleteFolder);

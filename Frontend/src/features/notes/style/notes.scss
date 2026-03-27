@@ -184,14 +184,24 @@
 .note-container-pillars {
   height: 100%;
 
+  .note-container-folders-top{
+    @include flex(space-between);
+
+    button{
+      margin-left: 0.5rem;
+
+      @media (max-width: 320px) {
+        padding: 0.5rem;
+      }
+    }
+  }
+
+
   .note-container-folders {
     height: 50%;
     padding: 1rem;
     overflow-y: scroll;
 
-    .note-container-folders-top{
-      @include flex(space-between);
-    }
 
     .note-container-folders-box {
       display: grid;

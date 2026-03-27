@@ -3,10 +3,21 @@ import FolderCard from "./FolderCard";
 import PaperNote from "./PaperNote";
 import { saveStickyNote } from "../../service/note.api";
 import { toast } from "react-toastify";
+import OMNIGraph from "../Graph/OMNIGraph";
+import { useState } from "react";
 
 const NotesHome = () => {
-  const { allpillar, setAllpillar , noteLoading, stickyNotes, showAddNote, setshowAddNote } =
-    useOutletContext();
+  const {
+    allNotes,
+    allpillar,
+    setAllpillar,
+    noteLoading,
+    stickyNotes,
+    showAddNote,
+    setshowAddNote,
+  } = useOutletContext();
+
+  const [seeGraph, setSeeGraph] = useState(false);
 
   if (noteLoading) {
     return (
@@ -34,43 +45,54 @@ const NotesHome = () => {
 
   return (
     <div className="note-container-pillars">
-      <div className="note-container-folders">
-        <div className="note-container-folders-top">
-          <h2>My Folders</h2>
+      <div className="note-container-folders-top">
+        <h2>Folders</h2>
+        <div>
           <button onClick={() => setshowAddNote(true)} className="btn-style">
             Add Note
           </button>
-        </div>
-        <div className="note-container-folders-box">
-          {allpillar?.map((pillar) => {
-            return (
-              <FolderCard
-                key={pillar._id}
-                pillarName={pillar.pillar}
-                pillarId={pillar._id}
-                pillarColor={pillar.color}
-                allpillar={allpillar}
-                setAllpillar={setAllpillar}
-              />
-            );
-          })}
+          <button onClick={() => setSeeGraph(!seeGraph)} className="btn-style">
+            {seeGraph ? "Back to Folders" : "See Graph"}
+          </button>
         </div>
       </div>
-      <div className="note-containe-stickyNotes">
-        <h2>My Sticky Notes</h2>
-        <div className="paper-wrap">
-          {stickyNotes?.map((note, idx) => (
-            <PaperNote
-              key={idx}
-              noteId={note._id}
-              noteContent={note.content}
-              noteTitle={note.topic}
-              noteDate={note.date}
-              handleSaveStickyNote={handleSaveStickyNote}
-            />
-          ))}
-        </div>
-      </div>
+      {seeGraph ? (
+        <OMNIGraph noteData={allNotes} />
+      ) : (
+        <>
+          <div className="note-container-folders">
+            <div className="note-container-folders-box">
+              {allpillar?.map((pillar) => {
+                return (
+                  <FolderCard
+                    key={pillar._id}
+                    pillarName={pillar.pillar}
+                    pillarId={pillar._id}
+                    pillarColor={pillar.color}
+                    allpillar={allpillar}
+                    setAllpillar={setAllpillar}
+                  />
+                );
+              })}
+            </div>
+          </div>
+          <div className="note-containe-stickyNotes">
+            <h2>My Sticky Notes</h2>
+            <div className="paper-wrap">
+              {stickyNotes?.map((note, idx) => (
+                <PaperNote
+                  key={idx}
+                  noteId={note._id}
+                  noteContent={note.content}
+                  noteTitle={note.topic}
+                  noteDate={note.date}
+                  handleSaveStickyNote={handleSaveStickyNote}
+                />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

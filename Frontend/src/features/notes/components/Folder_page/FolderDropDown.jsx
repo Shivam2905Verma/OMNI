@@ -57,7 +57,13 @@ const FolderDropDown = ({ value }) => {
 
     try {
       const res = await updatePillarNameAPI(pillarId, updatePillarName);
-      console.log(res);
+      setAllpillar((prev) =>
+        prev.map((el) =>
+          el._id === pillarId
+            ? { ...el, pillar: updatePillarName }
+            : el,
+        ),
+      );
       setDropDown(false);
     } catch (error) {
       console.log(" this is error from update Pillar Name ", error);

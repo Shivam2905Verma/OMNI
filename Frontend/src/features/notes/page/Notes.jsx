@@ -1,10 +1,10 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import bear from "../../../assets/bear.png";
 import menu from "../../../assets/menu.gif";
 import "../style/notes.scss";
 import {
+  getAllNotes,
   getPillars,
   getSaveFolderColorNames,
   getStickyNotes,
@@ -42,6 +42,8 @@ const Notes = () => {
     setSearchInput,
   } = useContext(NoteContext);
   const [allpillar, setAllpillar] = useState();
+
+  const [allNotes, setAllNotes] = useState();
   const [showAddFolder, setshowAddFolder] = useState(false);
   const [menuBarOpen, setMenuBarOpen] = useState(false);
 
@@ -119,6 +121,15 @@ const Notes = () => {
     }
   }
 
+  async function handleAllNoteData() {
+    try {
+      const res = await getAllNotes();
+      setAllNotes(res.allNotes);
+    } catch (error) {
+      console.log("This error is comming from handlesearch");
+    }
+  }
+
   useEffect(() => {
     if (!laoding && !user) {
       navigate("/login");
@@ -126,11 +137,11 @@ const Notes = () => {
   }, [user, laoding]);
 
   useEffect(() => {
+    handleAllNoteData();
     handleGetPillar();
     handleGetStickyNotes();
     handleGetSaveFolderColorNames();
   }, []);
-
 
   return (
     <div className="note-container">
@@ -197,6 +208,7 @@ const Notes = () => {
         <div className="note-container-right-bottom">
           <Outlet
             context={{
+              allNotes,
               showAddNote,
               setshowAddNote,
               allpillar,

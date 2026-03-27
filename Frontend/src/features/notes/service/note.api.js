@@ -19,6 +19,14 @@ export async function getPillars() {
     throw error;
   }
 }
+export async function getAllNotes() {
+  try {
+    const res = await api.get("/api/omni/get-AllNotes");
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function updatePillarNameAPI(pillarId, updatedName) {
   try {
