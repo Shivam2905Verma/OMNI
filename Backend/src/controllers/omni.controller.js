@@ -108,7 +108,6 @@ const saveOmniData = async (req, res) => {
       });
 
       imageUrl = uploadedFile.url;
-
     }
 
     let pillarID;
@@ -465,7 +464,16 @@ const getPillars = async (req, res) => {
   });
 };
 
-const updatePillarName = async (req, res) => {};
+const updatePillarName = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    return res.status(500).json({
+      message: "There is a error in updating pillar name",
+      success: false,
+    });
+  }
+};
 
 const getDataforPillar = async (req, res) => {
   const decoded = req.user;

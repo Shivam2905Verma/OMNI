@@ -39,10 +39,15 @@ const FolderDropDown = ({ value }) => {
     }
     setConfirmationOpen(false);
   }
+
   async function handleOnCancelDelete(e) {
     e.preventDefault();
     e.stopPropagation();
     setConfirmationOpen(false);
+  }
+
+  async function handleUpdatePillarName(){
+    
   }
 
   return (

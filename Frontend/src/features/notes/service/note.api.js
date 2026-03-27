@@ -16,7 +16,17 @@ export async function getPillars() {
     const res = await api.get("/api/omni/get-pillar");
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
+  }
+}
+
+export async function updatePillarName(){
+  try {
+   const res =  await api.patch("")
+   return res.data;
+  } catch (error) {
+    throw error;
+    
   }
 }
 
@@ -25,7 +35,7 @@ export async function getNotes(pillarId) {
     const res = await api.get(`/api/omni/notes/${pillarId}`);
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -34,7 +44,7 @@ export async function getSaveFolderColorNames() {
     const res = await api.get(`/api/omni/get-save-foldercolorName`);
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -45,7 +55,7 @@ export async function saveFolderColorNames(folderColors) {
     });
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -56,7 +66,7 @@ export async function setFolderColorfunc(pillarId, folderColor) {
     });
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -69,7 +79,7 @@ export async function saveStickyNote(topic, content, noteId) {
     });
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -81,7 +91,7 @@ export async function setfavouriteNote(noteId, liked) {
     });
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -90,7 +100,7 @@ export async function getfavouriteNote() {
     const res = await api.get(`/api/omni/get-favouriteNote`);
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -102,7 +112,7 @@ export async function addFolderFromWeb(folderName, color) {
     });
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 
@@ -111,7 +121,7 @@ export async function getStickyNotes() {
     const res = await api.get(`/api/omni/get-StickyNotes`);
     return res.data;
   } catch (error) {
-    throw error.response?.data;
+    throw error;
   }
 }
 

@@ -131,17 +131,6 @@ const Notes = () => {
     handleGetSaveFolderColorNames();
   }, []);
 
-  if (user && user.verified === false) {
-    return (
-      <div className="verify-page">
-        <div className="verify-card">
-          <h2>Email Verification Required</h2>
-          <p>Please verify your profile from the email we sent you.</p>
-          <img src={bear} alt="" />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="note-container">

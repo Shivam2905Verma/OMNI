@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       dispatch(setLoading(true));
-      const res = await login(identity, password);
+      const res = await login(identity.trim(), password.trim());
       dispatch(setUser(res.user));
       if (!res.success) {
         dispatch(setError(res.message));

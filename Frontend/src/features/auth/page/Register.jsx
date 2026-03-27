@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError, setLoading, setUser } from "../auth.slice";
 import { useState } from "react";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -18,25 +20,28 @@ const Register = () => {
 
   const dispatch = useDispatch();
 
-  async function handleRegister(e) {
-    e.preventDefault();
-    try {
-      dispatch(setLoading(true));
-      const res = await register(email, username, password);
-      if (!res.success) {
-        dispatch(setError(res.message));
-      }
+ async function handleRegister(e) {
+  e.preventDefault();
+  try {
+    dispatch(setLoading(true));
+    const res = await register(email.trim(), username.trim(), password.trim());
+    if (res.success) {
       dispatch(setUser(res.user));
-      if (user) {
-        navigate("/");
-      }
-    } catch (error) {
-      dispatch(setError(error));
-      console.log("this error come from login");
-    } finally {
-      dispatch(setLoading(false));
+      toast.success(res.message);
+      navigate("/");
+    }else{
+      dispatch(setError(res.message));
+         toast.error(res.message);
+      return;
     }
+  } catch (error) {
+    dispatch(setError(error.message || "Registration failed"));
+    console.log("this error come from register");
+  } finally {
+    dispatch(setLoading(false));
   }
+}
+
   useEffect(() => {
     if (user) {
       navigate("/");
