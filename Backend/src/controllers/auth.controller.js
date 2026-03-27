@@ -231,7 +231,7 @@ const verify_Email = async (req, res) => {
         <div class="icon-circle">✓</div>
         <h1>Email Verified!</h1>
         <p>Thank you, <strong>${user.username}</strong>. Your email has been successfully verified. You now have full access to your Omni account.</p>
-        <a href="https://omni.com/dashboard" class="btn">Go to Dashboard</a>
+        <a href="https://omni-five-topaz.vercel.app/notes" class="btn">Go to Dashboard</a>
     </div>
 </body>
 </html>
