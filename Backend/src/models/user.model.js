@@ -18,10 +18,6 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  verified: {
-    type: Boolean,
-    default: true,
-  },
 });
 
 userSchema.methods.comparepassward = function (candidatePassward) {
