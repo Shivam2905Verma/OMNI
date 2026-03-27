@@ -1,4 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const {Mistral } = require("@mistralai/mistralai")
+
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API);
 
 const OMNI_SCHEMA = {
@@ -81,6 +83,8 @@ const embeddingModel = genAI.getGenerativeModel({
   model: "gemini-embedding-001",
 });
 
+const searchMistral =  new Mistral({ apiKey: process.env.MISTRAL_API_KEY });
+
 
 const systemPrompt = (existingPillars) => `
 You are a Knowledge Architect. Categorize this content into a "Second Brain" hierarchy.
@@ -104,4 +108,4 @@ OUTPUT REQUIREMENTS:
   "summary": "One sentence summary."
 }
 `;
-module.exports = { model, embeddingModel, systemPrompt , searchModel };
+module.exports = { model, embeddingModel, systemPrompt , searchModel  , searchMistral};

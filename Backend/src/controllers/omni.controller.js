@@ -4,6 +4,7 @@ const {
   systemPrompt,
   embeddingModel,
   searchModel,
+  searchMistral,
 } = require("../services/googleAI.service");
 const noteModel = require("../models/data.model");
 const ImageKit = require("@imagekit/nodejs");
@@ -254,72 +255,64 @@ const addFolderFromWeb = async (req, res) => {
 
 const searchOmni = async (req, res) => {
   try {
-    console.log(req.params);
     const { search } = req.params;
 
     if (!search || typeof search !== "string" || search.trim().length === 0)
       return res.status(400).json({ message: "Search query is required" });
 
-    const sanitizedSearch = search.trim().slice(0, 500); // prevent prompt injection / huge inputs
-
-    const prompt = `
-You are an intelligent search query analyzer.
-
-Your job is to understand the user's search query and extract structured information.
-
-Return ONLY valid JSON in this format:
+    const sanitizedSearch = search.trim().slice(0, 500);
+    // prevent prompt injection / huge inputs
+    let parsedQuery;
+    const modelres = await searchMistral.chat.complete({
+      model: "mistral-small-latest",
+      responseFormat: { type: "json_object" }, // 👈 forces JSON output like Gemini's responseMimeType
+      messages: [
+        {
+          role: "system",
+          content: `You are an intelligent search query analyzer.
+Return ONLY valid JSON in this exact format:
 {
   "searchPillar": "",
   "searchSubtopic": "",
   "searchTags": [],
   "searchSummary": ""
 }
+- searchPillar: broad category (e.g., Music, Technology, Movies, Finance)
+- searchSubtopic: specific niche (e.g., Afrobeats, React Hooks, Marvel Movies)
+- searchTags: array of 3 to 5 relevant keywords
+- searchSummary: 1 sentence describing what the user is looking for
+Do not add anything outside the JSON.`,
+        },
+        {
+          role: "user",
+          content: `User Query: "${sanitizedSearch}"`,
+        },
+      ],
+    });
 
-Guidelines:
-- searchPillar: Choose a broad category (e.g., Music, Technology, Movies, Education, Nature, Finance, etc.)
-- searchSubtopic: Be more specific (e.g., Afrobeats, React Hooks, Marvel Movies, Stock Market Basics)
-- searchTags: Provide 3 to 5 relevant keywords
-- searchSummary: Write a clear 1-line description of what the user is looking for
+    const rawText = modelres.choices[0].message.content.trim();
+    const cleanText = rawText
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/, "");
+    parsedQuery = JSON.parse(cleanText);
 
-Important:
-- Keep responses concise
-- Do not explain anything
-- Do not add extra text outside JSON
-
-User Query: "${sanitizedSearch}"
-`;
-
-    let parsedQuery;
-    try {
-      const modelres = await searchModel.generateContent(prompt);
-      const rawText = modelres.response.text().trim();
-
-      const cleanText = rawText
-        .replace(/^```(?:json)?\s*/i, "")
-        .replace(/\s*```$/, "");
-      parsedQuery = JSON.parse(cleanText);
-    } catch (parseErr) {
-      console.error("AI parse error:", parseErr);
-      parsedQuery = {
-        searchPillar: "",
-        searchSubtopic: "",
-        searchTags: [],
-        searchSummary: sanitizedSearch,
-      };
-    }
 
     const { searchPillar, searchSubtopic, searchTags, searchSummary } =
       parsedQuery;
+    const hasAIData =
+      searchPillar || searchSubtopic || searchTags?.length || searchSummary;
 
-    const queryText = [
-      `User is searching for: ${sanitizedSearch}.`,
-      searchPillar ? `Category: ${searchPillar}.` : "",
-      searchSubtopic ? `Subtopic: ${searchSubtopic}.` : "",
-      searchTags?.length ? `Tags: ${searchTags.join(", ")}.` : "",
-      searchSummary ? `Description: ${searchSummary}.` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
+    const queryText = hasAIData
+      ? [
+          `Topic: ${sanitizedSearch}.`,
+          searchPillar ? `Category: ${searchPillar}.` : "",
+          searchSubtopic ? `Subtopic: ${searchSubtopic}.` : "",
+          searchTags?.length ? `Tags: ${searchTags.join(", ")}.` : "",
+          searchSummary ? `Description: ${searchSummary}.` : "",
+        ]
+          .filter(Boolean)
+          .join("\n")
+      : sanitizedSearch; // ✅ fallback: embed raw query only
 
     let queryVector;
     try {
@@ -482,7 +475,6 @@ const getPillars = async (req, res) => {
 
 const updatePillarName = async (req, res) => {
   try {
-    console.log(req.body);
     const { pillarId, updatedName } = req.body;
 
     const isExisted = await pillarModel.findById(pillarId);
@@ -569,7 +561,6 @@ const getAllStickyNotes = async (req, res) => {
 const setfavouriteNote = async (req, res) => {
   try {
     const { noteId, liked } = req.body;
-    console.log(liked);
 
     const note = await noteModel.findByIdAndUpdate(noteId, {
       favourite: liked,
